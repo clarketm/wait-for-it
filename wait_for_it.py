@@ -34,7 +34,6 @@ def cli(service, quiet, timeout, commands):
 
 def connect(service, timeout):
     scheme, _, host = service.rpartition(r"//")
-    print(f"{scheme}//{host}")
     url = urlparse(f"{scheme}//{host}", scheme="http")
 
     host = url.hostname
