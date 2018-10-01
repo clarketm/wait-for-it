@@ -37,7 +37,7 @@ def connect(service, timeout):
     url = urlparse(f"{scheme}//{host}", scheme="http")
 
     host = url.hostname
-    port = url.port or (443 if scheme == "https" else 80)
+    port = url.port or (443 if url.scheme == "https" else 80)
 
     friendly_name = f"{host}:{port}"
 
