@@ -6,6 +6,7 @@ import socket
 import subprocess
 import sys
 import time
+from urllib.parse import urlparse
 
 import click
 
@@ -16,7 +17,7 @@ VERSION = "0.0.1"
 @click.help_option("-h", "--help")
 @click.version_option(VERSION, "-v", "--version", message="Version %(version)s")
 @click.option("-q", "--quiet", default=False, is_flag=True, help="Do not output any status messages")
-@click.option("-s", "--service", type=str, metavar="host:port", multiple=True, help="Services to test, in the format host:port")
+@click.option("-s", "--service", metavar="host:port", multiple=True, help="Services to test, in the format host:port")
 @click.option("-t", "--timeout", type=int, metavar="seconds", default=15, show_default=True, help="Timeout in seconds, 0 for no timeout")
 @click.argument("commands", nargs=-1)
 def cli(service, quiet, timeout, commands):
@@ -32,8 +33,12 @@ def cli(service, quiet, timeout, commands):
 
 
 def connect(service, timeout):
-    host, port = service.split(":")
-    port = int(port) if port else 80
+    scheme, _, host = service.rpartition(r"//")
+    print(f"{scheme}//{host}")
+    url = urlparse(f"{scheme}//{host}", scheme="http")
+
+    host = url.hostname
+    port = url.port or (443 if scheme == "https" else 80)
 
     def _handle_timeout(signum, frame):
         print(f"timeout occurred after waiting {timeout} seconds for {service}")
@@ -59,10 +64,6 @@ def connect(service, timeout):
             time.sleep(1)
     finally:
         signal.alarm(0)
-
-
-def main():
-    print("main")
 
 
 if __name__ == "__main__":
