@@ -19,11 +19,11 @@ Usage: wait-for-it [OPTIONS] [COMMANDS]...
   Wait for service(s) to be available before executing a command.
 
 Options:
-  -h, --help             Show this message and exit.
-  -v, --version          Show the version and exit.
-  -q, --quiet            Don"t output any status messages
-  -s, --services TEXT    Services to test, in the format host:port
-  -t, --timeout INTEGER  Timeout in seconds, 0 for no timeout
+  -h, --help               Show this message and exit.
+  -v, --version            Show the version and exit.
+  -q, --quiet              Do not output any status messages
+  -s, --service host:port  Services to test, in the format host:port
+  -t, --timeout seconds    Timeout in seconds, 0 for no timeout  [default: 15]
 ```
 
 ## Examples

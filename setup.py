@@ -1,11 +1,13 @@
 import setuptools
 
+from wait_for_it import VERSION
+
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
     name="wait-for-it",
-    version="0.0.1",
+    version=VERSION,
     author="Travis Clarke",
     author_email="travis.m.clarke@gmail.com",
     description="Wait for service(s) to be available before executing a command.",

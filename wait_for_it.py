@@ -9,15 +9,15 @@ import time
 
 import click
 
-VERSION = "0.0.0"
+VERSION = "0.0.1"
 
 
 @click.command()
 @click.help_option("-h", "--help")
 @click.version_option(VERSION, "-v", "--version", message="Version %(version)s")
-@click.option("-q", "--quiet", default=False, is_flag=True, help="Don\"t output any status messages")
-@click.option("-s", "--service", multiple=True, help="Services to test, in the format host:port")
-@click.option("-t", "--timeout", type=int, default=15, help="Timeout in seconds, 0 for no timeout")
+@click.option("-q", "--quiet", default=False, is_flag=True, help="Do not output any status messages")
+@click.option("-s", "--service", type=str, metavar="host:port", multiple=True, help="Services to test, in the format host:port")
+@click.option("-t", "--timeout", type=int, metavar="seconds", default=15, show_default=True, help="Timeout in seconds, 0 for no timeout")
 @click.argument("commands", nargs=-1)
 def cli(service, quiet, timeout, commands):
     """Wait for service(s) to be available before executing a command."""
