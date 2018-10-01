@@ -39,16 +39,18 @@ def connect(service, timeout):
     host = url.hostname
     port = url.port or (443 if scheme == "https" else 80)
 
+    friendly_name = f"{host}:{port}"
+
     def _handle_timeout(signum, frame):
-        print(f"timeout occurred after waiting {timeout} seconds for {service}")
+        print(f"timeout occurred after waiting {timeout} seconds for {friendly_name}")
         sys.exit(1)
 
     if timeout > 0:
         signal.signal(signal.SIGALRM, _handle_timeout)
         signal.alarm(timeout)
-        print(f"waiting {timeout} seconds for {service}")
+        print(f"waiting {timeout} seconds for {friendly_name}")
     else:
-        print(f"waiting for {service} without a timeout")
+        print(f"waiting for {friendly_name} without a timeout")
 
     t1 = time.time()
 
@@ -58,7 +60,7 @@ def connect(service, timeout):
             s = sock.connect_ex((host, port))
             if s == 0:
                 seconds = round(time.time() - t1)
-                print(f"{service} is available after {seconds} seconds")
+                print(f"{friendly_name} is available after {seconds} seconds")
                 break
             time.sleep(1)
     finally:
