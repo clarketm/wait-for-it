@@ -14,7 +14,7 @@ $ pip install wait-for-it
 ```
 
 ## Usage
-```bash
+```txt
 Usage: wait-for-it [OPTIONS] [COMMANDS]...
 
   Wait for service(s) to be available before executing a command.
