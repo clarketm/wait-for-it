@@ -36,7 +36,7 @@ $ wait-for-it \
 -- echo "google is up"
 ```
 
-```bash
+```txt
 waiting 15 seconds for www.google.com:80
 www.google.com:80 is available after 0 seconds
 google is up
@@ -51,7 +51,7 @@ $ wait-for-it \
 -- echo "google is up"
 ```
 
-```bash
+```txt
 waiting for www.google.com:80 without a timeout
 www.google.com:80 is available after 0 seconds
 google is up
@@ -67,7 +67,7 @@ $ wait-for-it \
 -- echo "google, bing, and duckduckgo are up"
 ```
 
-```bash
+```txt
 waiting 15 seconds for www.google.com:80
 www.google.com:80 is available after 0 seconds
 waiting 15 seconds for www.bing.com:80
@@ -86,7 +86,7 @@ $ wait-for-it \
 -- echo "google is up"
 ```
 
-```bash
+```txt
 google is up
 ```
 
