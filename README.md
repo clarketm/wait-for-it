@@ -57,7 +57,7 @@ www.google.com:80 is available after 0 seconds
 google is up
 ```
 
-Multiple services can be tested by adding additional `-s <host:port>` or `--service <host:port>` options:
+Multiple services can be tested by adding additional `-s` or `--service` options:
 
 ```bash
 $ wait-for-it \
