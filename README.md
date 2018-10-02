@@ -7,11 +7,20 @@ Wait for service(s) to be available before executing a command.
 `wait-for-it` is a script that will wait on the availability of one or more TCP host:port services before executing a user-defined command.
 It is useful for synchronizing the spin-up of interdependent services, such as linked docker containers.
 
+<br>
+<br>
+<a href="https://blog.travismclarke.com/project/wait-for-it/">
+  <p align="center"><img width="40%" src="/hero.png" /></p>
+</a>
+
 ## Installation
 
 ```bash
 $ pip install wait-for-it
 ```
+
+## Demo
+![usage demo](https://github.com/clarketm/wait-for-it/blob/master/usage.gif)
 
 ## Usage
 ```txt
