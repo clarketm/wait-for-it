@@ -10,7 +10,7 @@ from urllib.parse import urlparse
 
 import click
 
-VERSION = "0.0.1"
+VERSION = "0.0.2"
 
 
 @click.command()
