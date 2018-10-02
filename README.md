@@ -4,7 +4,7 @@
 
 Wait for service(s) to be available before executing a command.
 
-`wait-for-it` is a script that will wait on the availability of one or more TCP host:port services before executing a user-defined command.
+`wait-for-it` is a script that will wait on the availability of one or more TCP services (i.e. `host:port`) before executing a user-defined command.
 It is useful for synchronizing the spin-up of interdependent services, such as linked docker containers.
 
 ## Installation
