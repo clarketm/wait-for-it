@@ -10,20 +10,41 @@ from urllib.parse import urlparse
 
 import click
 
-VERSION = "0.0.3"
+VERSION = "1.0.0"
 
 
 @click.command()
 @click.help_option("-h", "--help")
 @click.version_option(VERSION, "-v", "--version", message="Version %(version)s")
-@click.option("-q", "--quiet", default=False, is_flag=True, help="Do not output any status messages")
-@click.option("-s", "--service", metavar="host:port", multiple=True, help="Services to test, in the format host:port")
-@click.option("-t", "--timeout", type=int, metavar="seconds", default=15, show_default=True, help="Timeout in seconds, 0 for no timeout")
+@click.option(
+    "-q",
+    "--quiet",
+    default=False,
+    is_flag=True,
+    help="Do not output any status messages",
+)
+@click.option(
+    "-s",
+    "--service",
+    metavar="host:port",
+    multiple=True,
+    help="Services to test, in the format host:port",
+)
+@click.option(
+    "-t",
+    "--timeout",
+    type=int,
+    metavar="seconds",
+    default=15,
+    show_default=True,
+    help="Timeout in seconds, 0 for no timeout",
+)
 @click.argument("commands", nargs=-1)
 def cli(service, quiet, timeout, commands):
     """Wait for service(s) to be available before executing a command."""
 
-    if quiet: sys.stdout = open(os.devnull, "w")
+    if quiet:
+        sys.stdout = open(os.devnull, "w")
 
     for s in service:
         connect(s, timeout)
