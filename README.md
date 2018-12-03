@@ -20,7 +20,7 @@ $ pip install wait-for-it
 ```
 
 ## Demo
-![usage demo](https://github.com/clarketm/wait-for-it/blob/master/usage.gif)
+![usage demo](https://raw.githubusercontent.com/clarketm/wait-for-it/master/usage.gif)
 
 ## Usage
 ```txt

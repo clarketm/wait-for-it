@@ -17,9 +17,7 @@ setuptools.setup(
     packages=setuptools.find_packages(),
     py_modules=["wait_for_it"],
     install_requires=["click"],
-    entry_points={
-        'console_scripts': ['wait-for-it=wait_for_it:cli'],
-    },
+    entry_points={"console_scripts": ["wait-for-it=wait_for_it:cli"]},
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
