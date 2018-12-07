@@ -1,6 +1,7 @@
 # [wait-for-it](https://pypi.org/project/wait-for-it/)
 
 [![PyPi release](https://img.shields.io/pypi/v/wait-for-it.svg)](https://pypi.org/project/wait-for-it/)
+[![Downloads](https://pepy.tech/badge/wait-for-it)](https://pepy.tech/project/wait-for-it)
 
 Wait for service(s) to be available before executing a command.
 
