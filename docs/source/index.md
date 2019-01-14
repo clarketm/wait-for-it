@@ -115,5 +115,5 @@ google is up
 
 ## License
 
-MIT &copy; [**Travis Clarke**](https://blog.travismclarke.com/)
+MIT © [**Travis Clarke**](https://blog.travismclarke.com/)
 
