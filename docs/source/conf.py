@@ -30,7 +30,7 @@ copyright = "2019, Travis Clarke"
 author = "Travis Clarke"
 
 # The full version, including alpha/beta/rc tags
-release = __import__("wait_for_it").VERSION
+release = __import__("wait_for_it").__version__
 # The short X.Y version
 version = release
 

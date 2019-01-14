@@ -5,7 +5,7 @@
 .. title:: wait-for-it
 ```
 
-# [wait-for-it](https://pypi.org/project/wait-for-it/)
+# [wait-for-it](https://wait-for-it.readthedocs.io/en/latest/)
 
 ```eval_rst
 Version |version|
