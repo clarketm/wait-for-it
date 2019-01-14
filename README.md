@@ -1,7 +1,8 @@
-# [wait-for-it](https://pypi.org/project/wait-for-it/)
+# [wait-for-it](https://wait-for-it.readthedocs.io/en/latest/)
 
 [![PyPi release](https://img.shields.io/pypi/v/wait-for-it.svg)](https://pypi.org/project/wait-for-it/)
 [![Downloads](https://pepy.tech/badge/wait-for-it)](https://pepy.tech/project/wait-for-it)
+[![Docs](https://readthedocs.org/projects/pip/badge/?version=latest)](https://wait-for-it.readthedocs.io/en/latest/)
 
 Wait for service(s) to be available before executing a command.
 
@@ -13,6 +14,8 @@ Wait for service(s) to be available before executing a command.
 
 `wait-for-it` is a script that will wait on the availability of one or more TCP services (i.e. `host:port`) before executing a user-defined command.
 It is useful for synchronizing the spin-up of interdependent services, such as linked docker containers.
+
+[Check out the wait-for-it docs](https://wait-for-it.readthedocs.io/en/latest/)
 
 ## Installation
 
