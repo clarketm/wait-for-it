@@ -24,7 +24,7 @@ $ pip install wait-for-it
 ![usage demo](https://raw.githubusercontent.com/clarketm/wait-for-it/master/usage.gif)
 
 ## Usage
-```txt
+```text
 Usage: wait-for-it [OPTIONS] [COMMANDS]...
 
   Wait for service(s) to be available before executing a command.
@@ -47,7 +47,7 @@ $ wait-for-it \
 -- echo "google is up"
 ```
 
-```txt
+```text
 waiting 15 seconds for www.google.com:80
 www.google.com:80 is available after 0 seconds
 google is up
@@ -62,7 +62,7 @@ $ wait-for-it \
 -- echo "google is up"
 ```
 
-```txt
+```text
 waiting for www.google.com:80 without a timeout
 www.google.com:80 is available after 0 seconds
 google is up
@@ -78,7 +78,7 @@ $ wait-for-it \
 -- echo "google, bing, and duckduckgo are up"
 ```
 
-```txt
+```text
 waiting 15 seconds for www.google.com:80
 www.google.com:80 is available after 0 seconds
 waiting 15 seconds for www.bing.com:80
@@ -97,7 +97,7 @@ $ wait-for-it \
 -- echo "google is up"
 ```
 
-```txt
+```text
 google is up
 ```
 
