@@ -7,15 +7,14 @@ import subprocess
 import sys
 import time
 from urllib.parse import urlparse
+from wait_for_it import __version__
 
 import click
-
-VERSION = "1.0.1"
 
 
 @click.command()
 @click.help_option("-h", "--help")
-@click.version_option(VERSION, "-v", "--version", message="Version %(version)s")
+@click.version_option(__version__, "-v", "--version", message="Version %(version)s")
 @click.option(
     "-q",
     "--quiet",
