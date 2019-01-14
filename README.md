@@ -7,7 +7,7 @@ Wait for service(s) to be available before executing a command.
 
 <br>
 <a href="https://blog.travismclarke.com/project/wait-for-it/">
-  <p align="center"><img width="60%" src="/hero.png" /></p>
+  <p align="center"><img width="60%" src="https://raw.githubusercontent.com/clarketm/wait-for-it/master/hero.png" /></p>
 </a>
 
 
