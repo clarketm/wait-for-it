@@ -25,12 +25,13 @@ from recommonmark.transform import AutoStructify
 
 # -- Project information -----------------------------------------------------
 
-project = u"Eve"
+project = u"wait-for-it"
 copyright = '2019, Travis Clarke'
 author = 'Travis Clarke'
 
 # The full version, including alpha/beta/rc tags
-release = __import__("wait_for_it").VERSION
+# release = __import__("wait_for_it").VERSION
+release = "1.0.1"
 # The short X.Y version
 version = release
 
