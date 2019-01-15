@@ -2,7 +2,7 @@
 
 [![PyPi release](https://img.shields.io/pypi/v/wait-for-it.svg)](https://pypi.org/project/wait-for-it/)
 [![Downloads](https://pepy.tech/badge/wait-for-it)](https://pepy.tech/project/wait-for-it)
-[![Docs](https://readthedocs.org/projects/pip/badge/?version=latest)](https://wait-for-it.readthedocs.io/en/latest/)
+[![Documentation Status](https://readthedocs.org/projects/wait-for-it/badge/?version=latest)](https://wait-for-it.readthedocs.io/en/latest/?badge=latest)
 
 Wait for service(s) to be available before executing a command.
 
