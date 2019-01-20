@@ -7,9 +7,10 @@ import subprocess
 import sys
 import time
 from urllib.parse import urlparse
-from wait_for_it import __version__
 
 import click
+
+from wait_for_it import __version__
 
 
 @click.command()
@@ -74,17 +75,20 @@ def connect(service, timeout):
 
     t1 = time.time()
 
-    try:
-        while True:
+    while True:
+        try:
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             s = sock.connect_ex((host, port))
             if s == 0:
                 seconds = round(time.time() - t1)
                 print(f"{friendly_name} is available after {seconds} seconds")
                 break
+        except socket.gaierror:
+            pass
+        finally:
             time.sleep(1)
-    finally:
-        signal.alarm(0)
+
+    signal.alarm(0)
 
 
 if __name__ == "__main__":
