@@ -12,6 +12,9 @@ Version |version|
 
 .. image:: https://img.shields.io/pypi/v/wait-for-it.svg
     :target: https://pypi.org/project/wait-for-it/
+    
+.. image:: https://img.shields.io/pypi/pyversions/wait-for-it.svg
+    :target: https://pypi.org/project/wait-for-it/
 
 .. image:: https://pepy.tech/badge/wait-for-it
     :target: https://pepy.tech/project/wait-for-it
