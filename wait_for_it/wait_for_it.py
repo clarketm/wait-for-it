@@ -50,7 +50,8 @@ def cli(service, quiet, timeout, commands):
         connect(s, timeout)
 
     if len(commands):
-        subprocess.run(commands)
+        result = subprocess.run(commands)
+        sys.exit(result.returncode)
 
 
 def connect(service, timeout):
