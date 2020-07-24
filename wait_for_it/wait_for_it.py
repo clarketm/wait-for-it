@@ -21,6 +21,18 @@ def _determine_host_and_port_for(service):
     return host, port
 
 
+def _block_until_available(host, port):
+    while True:
+        try:
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            s = sock.connect_ex((host, port))
+            if s == 0:
+                break
+        except socket.gaierror:
+            pass
+        time.sleep(1)
+
+
 @click.command()
 @click.help_option("-h", "--help")
 @click.version_option(__version__, "-v", "--version", message="Version %(version)s")
@@ -80,15 +92,7 @@ def connect(service, timeout):
 
     t1 = time.time()
 
-    while True:
-        try:
-            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            s = sock.connect_ex((host, port))
-            if s == 0:
-                break
-        except socket.gaierror:
-            pass
-        time.sleep(1)
+    _block_until_available(host, port)
 
     signal.alarm(0)  # disarm sys-exit timer
 
