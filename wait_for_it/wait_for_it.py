@@ -86,8 +86,7 @@ def connect(service, timeout):
                 break
         except socket.gaierror:
             pass
-        finally:
-            time.sleep(1)
+        time.sleep(1)
 
     signal.alarm(0)
 
