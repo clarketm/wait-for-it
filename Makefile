@@ -1,6 +1,6 @@
 module:=wait_for_it
 project:=wait-for-it
-version:=$(shell python -c 'import sys, os; sys.path.insert(0, os.path.abspath(".")); print(__import__("${module}").__version__)')
+version:=$(shell python3 -c 'import sys, os; sys.path.insert(0, os.path.abspath(".")); print(__import__("${module}").__version__)')
 
 .PHONY: list
 list help:
@@ -8,7 +8,7 @@ list help:
 
 .PHONY: format
 format:
-	python -m black .
+	python3 -m black .
 
 .PHONY: build
 build:
@@ -33,6 +33,10 @@ check:
 upload-test: test clean build check
 	twine upload --repository-url https://test.pypi.org/legacy/ dist/*
 
+.PHONY: upload-test
+install-test:
+	pip3 install --force-reinstall --index-url https://test.pypi.org/simple "${project}"
+
 .PHONY: tag
 tag:
 ifeq (,$(shell git tag --list | grep "${version}"))
@@ -47,9 +51,13 @@ ifdef version
 	-H "Content-Type: application/json" \
 	"https://api.github.com/repos/clarketm/${project}/releases" \
 	--data "{\"tag_name\": \"v${version}\",\"target_commitish\": \"master\",\"name\": \"v${version}\",\"draft\": false,\"prerelease\": false}"
+	git push --tags
 endif
 
 .PHONY: upload
-publish upload: test clean build check
+publish upload: test clean build check release
 	twine upload dist/*
 
+.PHONY: install
+install:
+	pip3 install --force-reinstall "${project}"
