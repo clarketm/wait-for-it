@@ -85,14 +85,15 @@ def connect(service, timeout):
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             s = sock.connect_ex((host, port))
             if s == 0:
-                seconds = round(time.time() - t1)
-                print(f"{friendly_name} is available after {seconds} seconds")
                 break
         except socket.gaierror:
             pass
         time.sleep(1)
 
-    signal.alarm(0)
+    signal.alarm(0)  # disarm sys-exit timer
+
+    seconds = round(time.time() - t1)
+    print(f"{friendly_name} is available after {seconds} seconds")
 
 
 if __name__ == "__main__":
