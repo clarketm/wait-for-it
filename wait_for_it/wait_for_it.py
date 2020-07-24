@@ -13,6 +13,14 @@ import click
 from wait_for_it import __version__
 
 
+def _determine_host_and_port_for(service):
+    scheme, _, host = service.rpartition(r"//")
+    url = urlparse(f"{scheme}//{host}", scheme="http")
+    host = url.hostname
+    port = url.port or (443 if url.scheme == "https" else 80)
+    return host, port
+
+
 @click.command()
 @click.help_option("-h", "--help")
 @click.version_option(__version__, "-v", "--version", message="Version %(version)s")
@@ -55,11 +63,7 @@ def cli(service, quiet, timeout, commands):
 
 
 def connect(service, timeout):
-    scheme, _, host = service.rpartition(r"//")
-    url = urlparse(f"{scheme}//{host}", scheme="http")
-
-    host = url.hostname
-    port = url.port or (443 if url.scheme == "https" else 80)
+    host, port = _determine_host_and_port_for(service)
 
     friendly_name = f"{host}:{port}"
 
