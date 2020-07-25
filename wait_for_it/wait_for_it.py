@@ -113,7 +113,8 @@ def connect(service, timeout):
 
     asyncio.run(_wait_until_available(host, port))
 
-    signal.alarm(0)  # disarm sys-exit timer
+    if timeout > 0:
+        signal.alarm(0)  # disarm sys-exit timer
 
     reporter.on_success()
 
