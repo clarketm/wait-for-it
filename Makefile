@@ -65,6 +65,7 @@ check:
 tag:
 ifeq (,$(shell git tag --list | grep "${version}"))
 	@git tag "v${version}"
+	@git push --tags
 endif
 
 .PHONY: release
@@ -75,7 +76,6 @@ ifdef version
 	-H "Content-Type: application/json" \
 	"https://api.github.com/repos/clarketm/${project}/releases" \
 	--data "{\"tag_name\": \"v${version}\",\"target_commitish\": \"master\",\"name\": \"v${version}\",\"draft\": false,\"prerelease\": false}"
-	@git push --tags
 endif
 
 .PHONY: install
