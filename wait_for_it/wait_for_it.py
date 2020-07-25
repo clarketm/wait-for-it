@@ -34,6 +34,12 @@ async def _wait_until_available(host, port):
         await asyncio.sleep(1)
 
 
+async def _wait_until_available_and_report(reporter, host, port):
+    reporter.on_before_start()
+    await _wait_until_available(host, port)
+    reporter.on_success()
+
+
 @click.command()
 @click.help_option("-h", "--help")
 @click.version_option(__version__, "-v", "--version", message="Version %(version)s")
@@ -121,9 +127,7 @@ def connect(service, timeout):
     reporter = _ConnectionJobReporter(host, port, timeout)
 
     with _exit_on_timeout(timeout, on_exit=reporter.on_timeout):
-        reporter.on_before_start()
-        asyncio.run(_wait_until_available(host, port))
-        reporter.on_success()
+        asyncio.run(_wait_until_available_and_report(reporter, host, port))
 
 
 if __name__ == "__main__":
