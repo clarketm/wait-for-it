@@ -1,0 +1,27 @@
+name: Python package
+on: [push]
+jobs:
+  build:
+    strategy:
+      matrix:
+        python-version: [3.6, 3.7, 3.8]
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v1
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install dependencies
+      run: |
+        make install-deps-dev
+    - name: Format with black
+      run: |
+        make format-check
+    - name: Lint with flake8
+      run: |
+        make lint
+    - name: Test with pytest
+      run: |
+        make test
