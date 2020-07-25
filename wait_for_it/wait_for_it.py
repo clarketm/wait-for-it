@@ -74,30 +74,46 @@ def cli(service, quiet, timeout, commands):
         sys.exit(result.returncode)
 
 
+class _ConnectionJobReporter:
+    def __init__(self, host, port, timeout):
+        self._friendly_name = f"{host}:{port}"
+        self._timeout = timeout
+        self._started_at = None
+
+    def on_before_start(self):
+        if self._timeout:
+            print(f"waiting {self._timeout} seconds for {self._friendly_name}")
+        else:
+            print(f"waiting for {self._friendly_name} without a timeout")
+        self._started_at = time.time()
+
+    def on_success(self):
+        seconds = round(time.time() - self._started_at)
+        print(f"{self._friendly_name} is available after {seconds} seconds")
+
+    def on_timeout(self):
+        print(f"timeout occurred after waiting {self._timeout} seconds for {self._friendly_name}")
+
+
 def connect(service, timeout):
     host, port = _determine_host_and_port_for(service)
-
-    friendly_name = f"{host}:{port}"
+    reporter = _ConnectionJobReporter(host, port, timeout)
 
     def _handle_timeout(signum, frame):
-        print(f"timeout occurred after waiting {timeout} seconds for {friendly_name}")
+        reporter.on_timeout()
         sys.exit(1)
 
     if timeout > 0:
         signal.signal(signal.SIGALRM, _handle_timeout)
         signal.alarm(timeout)
-        print(f"waiting {timeout} seconds for {friendly_name}")
-    else:
-        print(f"waiting for {friendly_name} without a timeout")
 
-    t1 = time.time()
+    reporter.on_before_start()
 
     _block_until_available(host, port)
 
     signal.alarm(0)  # disarm sys-exit timer
 
-    seconds = round(time.time() - t1)
-    print(f"{friendly_name} is available after {seconds} seconds")
+    reporter.on_success()
 
 
 if __name__ == "__main__":
