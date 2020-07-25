@@ -5,7 +5,8 @@ from threading import Event, Thread
 from unittest import TestCase
 
 from click.testing import CliRunner
-from .wait_for_it import cli
+from parameterized import parameterized
+from .wait_for_it import cli, _determine_host_and_port_for
 
 _ANY_FREE_PORT = 0
 
@@ -79,3 +80,20 @@ class CliTest(TestCase):
             assert result.exit_code == 1
         finally:
             sock.close()
+
+
+class DetermineHostAndPortForTest(TestCase):
+    @parameterized.expand(
+        [
+            ("domain.ext", 80),
+            ("domain.ext:123", 123),
+            ("http://domain.ext", 80),
+            ("http://domain.ext/path/", 80),
+            ("https://domain.ext", 443),
+            ("https://domain.ext/path/", 443),
+        ]
+    )
+    def test_supportec(self, service, expected_port):
+        actual_host, actual_port = _determine_host_and_port_for(service)
+        assert actual_host == "domain.ext"
+        assert actual_port == expected_port
