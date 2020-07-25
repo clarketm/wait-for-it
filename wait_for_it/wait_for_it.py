@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-
+import asyncio
 import os
 import signal
 import socket
@@ -21,16 +21,16 @@ def _determine_host_and_port_for(service):
     return host, port
 
 
-def _block_until_available(host, port):
+async def _wait_until_available(host, port):
     while True:
         try:
-            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            s = sock.connect_ex((host, port))
-            if s == 0:
-                break
-        except socket.gaierror:
+            _reader, writer = await asyncio.open_connection(host, port)
+            writer.close()
+            await writer.wait_closed()
+            break
+        except (socket.gaierror, ConnectionError):
             pass
-        time.sleep(1)
+        await asyncio.sleep(1)
 
 
 @click.command()
@@ -111,7 +111,7 @@ def connect(service, timeout):
 
     reporter.on_before_start()
 
-    _block_until_available(host, port)
+    asyncio.run(_wait_until_available(host, port))
 
     signal.alarm(0)  # disarm sys-exit timer
 
