@@ -6,6 +6,7 @@ import socket
 import subprocess
 import sys
 import time
+from contextlib import contextmanager
 from urllib.parse import urlparse
 
 import click
@@ -97,24 +98,30 @@ class _ConnectionJobReporter:
         )
 
 
-def connect(service, timeout):
-    host, port = _determine_host_and_port_for(service)
-    reporter = _ConnectionJobReporter(host, port, timeout)
-
+@contextmanager
+def _exit_on_timeout(timeout, on_exit):
     def _handle_timeout(signum, frame):
-        reporter.on_timeout()
+        on_exit()
         sys.exit(1)
 
     if timeout > 0:
         signal.signal(signal.SIGALRM, _handle_timeout)
         signal.alarm(timeout)
 
-    reporter.on_before_start()
-
-    asyncio.run(_wait_until_available(host, port))
+    yield
 
     if timeout > 0:
         signal.alarm(0)  # disarm sys-exit timer
+
+
+def connect(service, timeout):
+    host, port = _determine_host_and_port_for(service)
+    reporter = _ConnectionJobReporter(host, port, timeout)
+
+    reporter.on_before_start()
+
+    with _exit_on_timeout(timeout, on_exit=reporter.on_timeout):
+        asyncio.run(_wait_until_available(host, port))
 
     reporter.on_success()
 
