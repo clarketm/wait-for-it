@@ -16,6 +16,7 @@ setuptools.setup(
     url="https://github.com/clarketm/wait-for-it",
     packages=setuptools.find_packages(),
     python_requires=">=3.6",
+    setup_requires=["setuptools>=38.6.0"],  # for long_description_content_type
     py_modules=["wait_for_it"],
     install_requires=["click"],
     extras_require={"dev": ["black", "click", "flake8", "pytest", "pytest-cov", "twine"]},
