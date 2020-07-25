@@ -51,6 +51,13 @@ async def _wait_until_available_and_report(reporter, host, port):
     help="Do not output any status messages",
 )
 @click.option(
+    "-p",
+    "--parallel",
+    default=False,
+    is_flag=True,
+    help="Test services in parallel rather than in serial",
+)
+@click.option(
     "-s",
     "--service",
     metavar="host:port",
@@ -67,13 +74,16 @@ async def _wait_until_available_and_report(reporter, host, port):
     help="Timeout in seconds, 0 for no timeout",
 )
 @click.argument("commands", nargs=-1)
-def cli(service, quiet, timeout, commands):
+def cli(service, quiet, parallel, timeout, commands):
     """Wait for service(s) to be available before executing a command."""
 
     if quiet:
         sys.stdout = open(os.devnull, "w")
 
-    _connect_all_serial(service, timeout)
+    if parallel:
+        _connect_all_parallel(service, timeout)
+    else:
+        _connect_all_serial(service, timeout)
 
     if len(commands):
         result = subprocess.run(commands)
@@ -119,6 +129,32 @@ def _exit_on_timeout(timeout, on_exit):
 
     if timeout > 0:
         signal.alarm(0)  # disarm sys-exit timer
+
+
+async def _connect_all_parallel_async(services, timeout):
+    connect_job_awaitables = []
+    reporters = []
+
+    for service in services:
+        host, port = _determine_host_and_port_for(service)
+        reporter = _ConnectionJobReporter(host, port, timeout)
+        reporters.append(reporter)
+        connect_job_awaitables.append(
+            _wait_until_available_and_report(reporter, host, port)
+        )
+
+    def _report_on_all_unsucessful_jobs():
+        for reporter in reporters:
+            if reporter.job_successful:
+                continue
+            reporter.on_timeout()
+
+    with _exit_on_timeout(timeout, on_exit=_report_on_all_unsucessful_jobs):
+        await asyncio.wait(connect_job_awaitables)
+
+
+def _connect_all_parallel(services, timeout):
+    asyncio.run(_connect_all_parallel_async(services, timeout))
 
 
 def _connect_all_serial(services, timeout):
