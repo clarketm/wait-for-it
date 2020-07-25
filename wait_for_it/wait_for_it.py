@@ -92,7 +92,9 @@ class _ConnectionJobReporter:
         print(f"{self._friendly_name} is available after {seconds} seconds")
 
     def on_timeout(self):
-        print(f"timeout occurred after waiting {self._timeout} seconds for {self._friendly_name}")
+        print(
+            f"timeout occurred after waiting {self._timeout} seconds for {self._friendly_name}"
+        )
 
 
 def connect(service, timeout):

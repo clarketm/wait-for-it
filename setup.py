@@ -18,6 +18,7 @@ setuptools.setup(
     python_requires=">=3.6",
     py_modules=["wait_for_it"],
     install_requires=["click"],
+    extras_require={"dev": ["black", "click", "flake8", "pytest", "pytest-cov", "twine"]},
     entry_points={"console_scripts": ["wait-for-it=wait_for_it.wait_for_it:cli"]},
     classifiers=[
         "Programming Language :: Python :: 3",
