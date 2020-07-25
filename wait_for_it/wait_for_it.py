@@ -14,6 +14,17 @@ import click
 from wait_for_it import __version__
 
 
+def _asyncio_run(*args, **kvargs):
+    """
+    Cheap backport of asyncio.run of Python 3.7+ to Python 3.6.
+    For the real deal, see
+    https://github.com/python/cpython/blob/3.7/Lib/asyncio/runners.py#L8
+    """
+    if sys.version_info[:2] >= (3, 7):
+        return asyncio.run(*args, **kvargs)
+    return asyncio.get_event_loop().run_until_complete(*args, **kvargs)
+
+
 def _determine_host_and_port_for(service):
     scheme, _, host = service.rpartition(r"//")
     url = urlparse(f"{scheme}//{host}", scheme="http")
@@ -27,7 +38,8 @@ async def _wait_until_available(host, port):
         try:
             _reader, writer = await asyncio.open_connection(host, port)
             writer.close()
-            await writer.wait_closed()
+            if sys.version_info[:2] >= (3, 7):
+                await writer.wait_closed()
             break
         except (socket.gaierror, ConnectionError):
             pass
@@ -154,7 +166,7 @@ async def _connect_all_parallel_async(services, timeout):
 
 
 def _connect_all_parallel(services, timeout):
-    asyncio.run(_connect_all_parallel_async(services, timeout))
+    _asyncio_run(_connect_all_parallel_async(services, timeout))
 
 
 def _connect_all_serial(services, timeout):
@@ -167,7 +179,7 @@ def connect(service, timeout):
     reporter = _ConnectionJobReporter(host, port, timeout)
 
     with _exit_on_timeout(timeout, on_exit=reporter.on_timeout):
-        asyncio.run(_wait_until_available_and_report(reporter, host, port))
+        _asyncio_run(_wait_until_available_and_report(reporter, host, port))
 
 
 if __name__ == "__main__":
