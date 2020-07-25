@@ -23,10 +23,13 @@ setuptools.setup(
     entry_points={"console_scripts": ["wait-for-it=wait_for_it.wait_for_it:cli"]},
     classifiers=[
         "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3 :: Only",
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
         "License :: OSI Approved :: MIT License",
         "Operating System :: POSIX",
+        "Topic :: Internet",
+        "Topic :: Utilities",
     ],
 )
