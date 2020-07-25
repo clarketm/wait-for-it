@@ -7,4 +7,5 @@ from .wait_for_it import cli
 def test_cli_help():
     runner = CliRunner()
     result = runner.invoke(cli, ["--help"])
+    assert 'Usage:' in result.output
     assert result.exit_code == 0
