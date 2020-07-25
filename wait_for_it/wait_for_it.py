@@ -73,8 +73,7 @@ def cli(service, quiet, timeout, commands):
     if quiet:
         sys.stdout = open(os.devnull, "w")
 
-    for s in service:
-        connect(s, timeout)
+    _connect_all_serial(service, timeout)
 
     if len(commands):
         result = subprocess.run(commands)
@@ -120,6 +119,11 @@ def _exit_on_timeout(timeout, on_exit):
 
     if timeout > 0:
         signal.alarm(0)  # disarm sys-exit timer
+
+
+def _connect_all_serial(services, timeout):
+    for service in services:
+        connect(service, timeout)
 
 
 def connect(service, timeout):
