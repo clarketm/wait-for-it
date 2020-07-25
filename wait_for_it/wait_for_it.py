@@ -13,6 +13,26 @@ import click
 from wait_for_it import __version__
 
 
+def _determine_host_and_port_for(service):
+    scheme, _, host = service.rpartition(r"//")
+    url = urlparse(f"{scheme}//{host}", scheme="http")
+    host = url.hostname
+    port = url.port or (443 if url.scheme == "https" else 80)
+    return host, port
+
+
+def _block_until_available(host, port):
+    while True:
+        try:
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            s = sock.connect_ex((host, port))
+            if s == 0:
+                break
+        except socket.gaierror:
+            pass
+        time.sleep(1)
+
+
 @click.command()
 @click.help_option("-h", "--help")
 @click.version_option(__version__, "-v", "--version", message="Version %(version)s")
@@ -54,41 +74,46 @@ def cli(service, quiet, timeout, commands):
         sys.exit(result.returncode)
 
 
+class _ConnectionJobReporter:
+    def __init__(self, host, port, timeout):
+        self._friendly_name = f"{host}:{port}"
+        self._timeout = timeout
+        self._started_at = None
+
+    def on_before_start(self):
+        if self._timeout:
+            print(f"waiting {self._timeout} seconds for {self._friendly_name}")
+        else:
+            print(f"waiting for {self._friendly_name} without a timeout")
+        self._started_at = time.time()
+
+    def on_success(self):
+        seconds = round(time.time() - self._started_at)
+        print(f"{self._friendly_name} is available after {seconds} seconds")
+
+    def on_timeout(self):
+        print(f"timeout occurred after waiting {self._timeout} seconds for {self._friendly_name}")
+
+
 def connect(service, timeout):
-    scheme, _, host = service.rpartition(r"//")
-    url = urlparse(f"{scheme}//{host}", scheme="http")
-
-    host = url.hostname
-    port = url.port or (443 if url.scheme == "https" else 80)
-
-    friendly_name = f"{host}:{port}"
+    host, port = _determine_host_and_port_for(service)
+    reporter = _ConnectionJobReporter(host, port, timeout)
 
     def _handle_timeout(signum, frame):
-        print(f"timeout occurred after waiting {timeout} seconds for {friendly_name}")
+        reporter.on_timeout()
         sys.exit(1)
 
     if timeout > 0:
         signal.signal(signal.SIGALRM, _handle_timeout)
         signal.alarm(timeout)
-        print(f"waiting {timeout} seconds for {friendly_name}")
-    else:
-        print(f"waiting for {friendly_name} without a timeout")
 
-    t1 = time.time()
+    reporter.on_before_start()
 
-    while True:
-        try:
-            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            s = sock.connect_ex((host, port))
-            if s == 0:
-                seconds = round(time.time() - t1)
-                print(f"{friendly_name} is available after {seconds} seconds")
-                break
-        except socket.gaierror:
-            pass
-        time.sleep(1)
+    _block_until_available(host, port)
 
-    signal.alarm(0)
+    signal.alarm(0)  # disarm sys-exit timer
+
+    reporter.on_success()
 
 
 if __name__ == "__main__":
