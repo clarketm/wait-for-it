@@ -80,6 +80,7 @@ class _ConnectionJobReporter:
         self._friendly_name = f"{host}:{port}"
         self._timeout = timeout
         self._started_at = None
+        self.job_successful = None
 
     def on_before_start(self):
         if self._timeout:
@@ -91,6 +92,7 @@ class _ConnectionJobReporter:
     def on_success(self):
         seconds = round(time.time() - self._started_at)
         print(f"{self._friendly_name} is available after {seconds} seconds")
+        self.job_successful = True
 
     def on_timeout(self):
         print(
