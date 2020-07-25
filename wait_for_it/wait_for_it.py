@@ -120,12 +120,10 @@ def connect(service, timeout):
     host, port = _determine_host_and_port_for(service)
     reporter = _ConnectionJobReporter(host, port, timeout)
 
-    reporter.on_before_start()
-
     with _exit_on_timeout(timeout, on_exit=reporter.on_timeout):
+        reporter.on_before_start()
         asyncio.run(_wait_until_available(host, port))
-
-    reporter.on_success()
+        reporter.on_success()
 
 
 if __name__ == "__main__":
