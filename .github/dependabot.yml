@@ -1,0 +1,14 @@
+version: 2
+updates:
+
+  - package-ecosystem: "github-actions"
+    commit-message:
+      include: "scope"
+      prefix: "Actions"
+    directory: "/"
+    labels:
+      - "enhancement"
+    reviewers:
+      - "clarketm"
+    schedule:
+      interval: "weekly"
