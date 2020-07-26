@@ -103,6 +103,10 @@ def cli(service, quiet, parallel, timeout, commands):
 
 
 class _ConnectionJobReporter:
+    _SUCCESS = "[+] "
+    _FAILURE = "[-] "
+    _NEUTRAL = "[*] "
+
     def __init__(self, host, port, timeout):
         self._friendly_name = f"{host}:{port}"
         self._timeout = timeout
@@ -111,19 +115,24 @@ class _ConnectionJobReporter:
 
     def on_before_start(self):
         if self._timeout:
-            print(f"waiting {self._timeout} seconds for {self._friendly_name}")
+            print(
+                f"{self._NEUTRAL}Waiting {self._timeout} seconds for {self._friendly_name}"
+            )
         else:
-            print(f"waiting for {self._friendly_name} without a timeout")
+            print(f"{self._NEUTRAL}Waiting for {self._friendly_name} without a timeout")
         self._started_at = time.time()
 
     def on_success(self):
         seconds = round(time.time() - self._started_at)
-        print(f"{self._friendly_name} is available after {seconds} seconds")
+        print(
+            f"{self._SUCCESS}{self._friendly_name} is available after {seconds} seconds"
+        )
         self.job_successful = True
 
     def on_timeout(self):
         print(
-            f"timeout occurred after waiting {self._timeout} seconds for {self._friendly_name}"
+            f"{self._FAILURE}Timeout occurred after waiting {self._timeout} seconds"
+            f" for {self._friendly_name}"
         )
 
 

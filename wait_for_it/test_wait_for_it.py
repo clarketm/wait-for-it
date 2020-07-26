@@ -104,7 +104,7 @@ class CliTest(TestCase):
                 cli,
                 ["-t1", "-s", f"{host}:{port}", "-s", f"{host}:{port}"] + extra_argv,
             )
-            assert result.output.count("timeout occurred") == expected_report_count
+            assert result.output.count("Timeout occurred") == expected_report_count
             assert result.exit_code == 1
         finally:
             sock.close()
