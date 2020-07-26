@@ -61,21 +61,34 @@ class CliTest(TestCase):
         assert "Usage:" in result.output
         assert result.exit_code == 0
 
-    def test_service_available(self):
+    @parameterized.expand([("parallel", ["-p"]), ("serial", [])])
+    def test_service_available(self, _label, extra_argv):
         server = _start_server_thread()
         try:
             result = self._runner.invoke(
-                cli, ["-t1", "-s", f"{server.host}:{server.port}"]
+                cli,
+                [
+                    "-t1",
+                    "-s",
+                    f"{server.host}:{server.port}",
+                    "-s",
+                    f"{server.host}:{server.port}",
+                ]
+                + extra_argv,
             )
             assert " is available after " in result.output
             assert result.exit_code == 0
         finally:
             server.stop()
 
-    def test_service_unavailable(self):
+    @parameterized.expand([("parallel", ["-p"]), ("serial", [])])
+    def test_service_unavailable(self, _label, extra_argv):
         host, port, sock = _occupy_free_tcp_port()
         try:
-            result = self._runner.invoke(cli, ["-t1", "-s", f"{host}:{port}"])
+            result = self._runner.invoke(
+                cli,
+                ["-t1", "-s", f"{host}:{port}", "-s", f"{host}:{port}"] + extra_argv,
+            )
             assert "timeout occurred" in result.output
             assert result.exit_code == 1
         finally:

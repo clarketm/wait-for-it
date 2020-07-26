@@ -1,16 +1,28 @@
 #!/usr/bin/env python3
-
+import asyncio
 import os
 import signal
 import socket
 import subprocess
 import sys
 import time
+from contextlib import contextmanager
 from urllib.parse import urlparse
 
 import click
 
 from wait_for_it import __version__
+
+
+def _asyncio_run(*args, **kvargs):
+    """
+    Cheap backport of asyncio.run of Python 3.7+ to Python 3.6.
+    For the real deal, see
+    https://github.com/python/cpython/blob/3.7/Lib/asyncio/runners.py#L8
+    """
+    if sys.version_info[:2] >= (3, 7):
+        return asyncio.run(*args, **kvargs)
+    return asyncio.get_event_loop().run_until_complete(*args, **kvargs)
 
 
 def _determine_host_and_port_for(service):
@@ -21,16 +33,23 @@ def _determine_host_and_port_for(service):
     return host, port
 
 
-def _block_until_available(host, port):
+async def _wait_until_available(host, port):
     while True:
         try:
-            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            s = sock.connect_ex((host, port))
-            if s == 0:
-                break
-        except socket.gaierror:
+            _reader, writer = await asyncio.open_connection(host, port)
+            writer.close()
+            if sys.version_info[:2] >= (3, 7):
+                await writer.wait_closed()
+            break
+        except (socket.gaierror, ConnectionError):
             pass
-        time.sleep(1)
+        await asyncio.sleep(1)
+
+
+async def _wait_until_available_and_report(reporter, host, port):
+    reporter.on_before_start()
+    await _wait_until_available(host, port)
+    reporter.on_success()
 
 
 @click.command()
@@ -42,6 +61,13 @@ def _block_until_available(host, port):
     default=False,
     is_flag=True,
     help="Do not output any status messages",
+)
+@click.option(
+    "-p",
+    "--parallel",
+    default=False,
+    is_flag=True,
+    help="Test services in parallel rather than in serial",
 )
 @click.option(
     "-s",
@@ -60,14 +86,16 @@ def _block_until_available(host, port):
     help="Timeout in seconds, 0 for no timeout",
 )
 @click.argument("commands", nargs=-1)
-def cli(service, quiet, timeout, commands):
+def cli(service, quiet, parallel, timeout, commands):
     """Wait for service(s) to be available before executing a command."""
 
     if quiet:
         sys.stdout = open(os.devnull, "w")
 
-    for s in service:
-        connect(s, timeout)
+    if parallel:
+        _connect_all_parallel(service, timeout)
+    else:
+        _connect_all_serial(service, timeout)
 
     if len(commands):
         result = subprocess.run(commands)
@@ -79,6 +107,7 @@ class _ConnectionJobReporter:
         self._friendly_name = f"{host}:{port}"
         self._timeout = timeout
         self._started_at = None
+        self.job_successful = None
 
     def on_before_start(self):
         if self._timeout:
@@ -90,6 +119,7 @@ class _ConnectionJobReporter:
     def on_success(self):
         seconds = round(time.time() - self._started_at)
         print(f"{self._friendly_name} is available after {seconds} seconds")
+        self.job_successful = True
 
     def on_timeout(self):
         print(
@@ -97,25 +127,59 @@ class _ConnectionJobReporter:
         )
 
 
-def connect(service, timeout):
-    host, port = _determine_host_and_port_for(service)
-    reporter = _ConnectionJobReporter(host, port, timeout)
-
+@contextmanager
+def _exit_on_timeout(timeout, on_exit):
     def _handle_timeout(signum, frame):
-        reporter.on_timeout()
+        on_exit()
         sys.exit(1)
 
     if timeout > 0:
         signal.signal(signal.SIGALRM, _handle_timeout)
         signal.alarm(timeout)
 
-    reporter.on_before_start()
+    yield
 
-    _block_until_available(host, port)
+    if timeout > 0:
+        signal.alarm(0)  # disarm sys-exit timer
 
-    signal.alarm(0)  # disarm sys-exit timer
 
-    reporter.on_success()
+async def _connect_all_parallel_async(services, timeout):
+    connect_job_awaitables = []
+    reporters = []
+
+    for service in services:
+        host, port = _determine_host_and_port_for(service)
+        reporter = _ConnectionJobReporter(host, port, timeout)
+        reporters.append(reporter)
+        connect_job_awaitables.append(
+            _wait_until_available_and_report(reporter, host, port)
+        )
+
+    def _report_on_all_unsucessful_jobs():
+        for reporter in reporters:
+            if reporter.job_successful:
+                continue
+            reporter.on_timeout()
+
+    with _exit_on_timeout(timeout, on_exit=_report_on_all_unsucessful_jobs):
+        await asyncio.wait(connect_job_awaitables)
+
+
+def _connect_all_parallel(services, timeout):
+    _asyncio_run(_connect_all_parallel_async(services, timeout))
+
+
+def _connect_all_serial(services, timeout):
+    for service in services:
+        connect(service, timeout)
+
+
+def connect(service, timeout):
+    host, port = _determine_host_and_port_for(service)
+    reporter = _ConnectionJobReporter(host, port, timeout)
+
+    with _exit_on_timeout(timeout, on_exit=reporter.on_timeout):
+        _asyncio_run(_wait_until_available_and_report(reporter, host, port))
 
 
 if __name__ == "__main__":
