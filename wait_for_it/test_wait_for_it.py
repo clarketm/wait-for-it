@@ -1,5 +1,9 @@
 """wait_for_it cli test module"""
 import socket
+import subprocess
+
+from unittest.mock import call, Mock, patch
+
 import socketserver
 from threading import Event, Thread
 from unittest import TestCase
@@ -60,6 +64,17 @@ class CliTest(TestCase):
         result = self._runner.invoke(cli, ["--help"])
         assert "Usage:" in result.output
         assert result.exit_code == 0
+
+    @parameterized.expand([(["echo", "one", "two"], 0), (["false"], 1)])
+    def test_command_invocation_forwards_exit_code(
+        self, command_argv, expected_exit_code
+    ):
+        with patch.object(
+            subprocess, "run", return_value=Mock(returncode=expected_exit_code)
+        ) as mock_subprocess_run:
+            result = self._runner.invoke(cli, command_argv)
+        assert mock_subprocess_run.call_args == call(tuple(command_argv))
+        assert result.exit_code == expected_exit_code
 
     @parameterized.expand([("parallel", ["-p"]), ("serial", [])])
     def test_service_available(self, _label, extra_argv):
