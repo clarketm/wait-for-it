@@ -155,13 +155,13 @@ async def _connect_all_parallel_async(services, timeout):
             _wait_until_available_and_report(reporter, host, port)
         )
 
-    def _report_on_all_unsucessful_jobs():
+    def _report_on_all_unsuccessful_jobs():
         for reporter in reporters:
             if reporter.job_successful:
                 continue
             reporter.on_timeout()
 
-    with _exit_on_timeout(timeout, on_exit=_report_on_all_unsucessful_jobs):
+    with _exit_on_timeout(timeout, on_exit=_report_on_all_unsuccessful_jobs):
         await asyncio.wait(connect_job_awaitables)
 
 
