@@ -39,6 +39,7 @@ Options:
   -h, --help               Show this message and exit.
   -v, --version            Show the version and exit.
   -q, --quiet              Do not output any status messages
+  -p, --parallel           Test services in parallel rather than in serial
   -s, --service host:port  Services to test, in the format host:port
   -t, --timeout seconds    Timeout in seconds, 0 for no timeout  [default: 15]
 ```
@@ -94,6 +95,27 @@ www.duckduckgo.com:80 is available after 0 seconds
 google, bing, and duckduckgo are up
 ```
 
+By adding the `-p` or `--parallel` option, `wait-for-it` can do the same in parallel rather than serial:
+
+```bash
+$ wait-for-it \
+--parallel \
+--service www.google.com:80 \
+--service www.bing.com:80 \
+--service www.duckduckgo.com:80 \
+-- echo "google, bing, and duckduckgo are up"
+```
+
+```text
+waiting 15 seconds for www.bing.com:80
+waiting 15 seconds for www.duckduckgo.com:80
+waiting 15 seconds for www.google.com:80
+www.bing.com:80 is available after 0 seconds
+www.duckduckgo.com:80 is available after 0 seconds
+www.google.com:80 is available after 0 seconds
+google, bing, and duckduckgo are up
+```
+
 Status message output can be suppressed with the `-q` or `--quiet` option:
 
 ```bash
@@ -112,4 +134,5 @@ google is up
 
 ## License
 
-MIT &copy; [**Travis Clarke**](https://blog.travismclarke.com/)
+MIT &copy; [**Travis Clarke**](https://blog.travismclarke.com/),
+           [Sebastian Pipping](https://blog.hartwork.org/)
