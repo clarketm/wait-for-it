@@ -97,7 +97,7 @@ def cli(service, quiet, parallel, timeout, commands):
     else:
         _connect_all_serial(service, timeout)
 
-    if len(commands):
+    if commands:
         result = subprocess.run(commands)
         sys.exit(result.returncode)
 
