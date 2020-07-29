@@ -55,8 +55,8 @@ $ wait-for-it \
 ```
 
 ```text
-waiting 15 seconds for www.google.com:80
-www.google.com:80 is available after 0 seconds
+[*] Waiting 15 seconds for www.google.com:80
+[+] www.google.com:80 is available after 0 seconds
 google is up
 ```
 
@@ -70,8 +70,8 @@ $ wait-for-it \
 ```
 
 ```text
-waiting for www.google.com:80 without a timeout
-www.google.com:80 is available after 0 seconds
+[*] Waiting for www.google.com:80 without a timeout
+[+] www.google.com:80 is available after 0 seconds
 google is up
 ```
 
@@ -86,12 +86,12 @@ $ wait-for-it \
 ```
 
 ```text
-waiting 15 seconds for www.google.com:80
-www.google.com:80 is available after 0 seconds
-waiting 15 seconds for www.bing.com:80
-www.bing.com:80 is available after 0 seconds
-waiting 15 seconds for www.duckduckgo.com:80
-www.duckduckgo.com:80 is available after 0 seconds
+[*] Waiting 15 seconds for www.google.com:80
+[+] www.google.com:80 is available after 0 seconds
+[*] Waiting 15 seconds for www.bing.com:80
+[+] www.bing.com:80 is available after 0 seconds
+[*] Waiting 15 seconds for www.duckduckgo.com:80
+[+] www.duckduckgo.com:80 is available after 0 seconds
 google, bing, and duckduckgo are up
 ```
 
@@ -107,12 +107,12 @@ $ wait-for-it \
 ```
 
 ```text
-waiting 15 seconds for www.bing.com:80
-waiting 15 seconds for www.duckduckgo.com:80
-waiting 15 seconds for www.google.com:80
-www.bing.com:80 is available after 0 seconds
-www.duckduckgo.com:80 is available after 0 seconds
-www.google.com:80 is available after 0 seconds
+[*] Waiting 15 seconds for www.bing.com:80
+[*] Waiting 15 seconds for www.duckduckgo.com:80
+[*] Waiting 15 seconds for www.google.com:80
+[+] www.bing.com:80 is available after 0 seconds
+[+] www.duckduckgo.com:80 is available after 0 seconds
+[+] www.google.com:80 is available after 0 seconds
 google, bing, and duckduckgo are up
 ```
 
