@@ -121,7 +121,7 @@ class DetermineHostAndPortForTest(TestCase):
             ("https://domain.ext/path/", 443),
         ]
     )
-    def test_supportec(self, service, expected_port):
+    def test_supported(self, service, expected_port):
         actual_host, actual_port = _determine_host_and_port_for(service)
         assert actual_host == "domain.ext"
         assert actual_port == expected_port
