@@ -113,15 +113,15 @@ class CliTest(TestCase):
 class DetermineHostAndPortForTest(TestCase):
     @parameterized.expand(
         [
-            ("domain.ext", 80),
-            ("domain.ext:123", 123),
-            ("http://domain.ext", 80),
-            ("http://domain.ext/path/", 80),
-            ("https://domain.ext", 443),
-            ("https://domain.ext/path/", 443),
+            ("domain.ext", "domain.ext", 80),
+            ("domain.ext:123", "domain.ext", 123),
+            ("http://domain.ext", "domain.ext", 80),
+            ("http://domain.ext/path/", "domain.ext", 80),
+            ("https://domain.ext", "domain.ext", 443),
+            ("https://domain.ext/path/", "domain.ext", 443),
         ]
     )
-    def test_supported(self, service, expected_port):
+    def test_supported(self, service, expected_host, expected_port):
         actual_host, actual_port = _determine_host_and_port_for(service)
-        assert actual_host == "domain.ext"
+        assert actual_host == expected_host
         assert actual_port == expected_port
