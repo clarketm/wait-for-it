@@ -15,6 +15,15 @@ import click
 from wait_for_it import __version__
 
 
+class _WaitForItException(Exception):
+    """Base class for all exceptions custom to wait-for-it"""
+
+
+class _MalformedServiceSyntaxException(_WaitForItException):
+    def __init__(self, service):
+        super().__init__(f"{service!r} is not a supported syntax for a service")
+
+
 def _asyncio_run(*args, **kvargs):
     """
     Cheap backport of asyncio.run of Python 3.7+ to Python 3.6.
@@ -28,9 +37,12 @@ def _asyncio_run(*args, **kvargs):
 
 def _determine_host_and_port_for(service):
     scheme, _, host = service.rpartition(r"//")
-    url = urlparse(f"{scheme}//{host}", scheme="http")
-    host = url.hostname
-    port = url.port or (443 if url.scheme == "https" else 80)
+    try:
+        url = urlparse(f"{scheme}//{host}", scheme="http")
+        host = url.hostname
+        port = url.port or (443 if url.scheme == "https" else 80)
+    except ValueError:
+        raise _MalformedServiceSyntaxException(service)
     return host, port
 
 
@@ -87,9 +99,16 @@ async def _wait_until_available_and_report(reporter, host, port):
     help="Timeout in seconds, 0 for no timeout",
 )
 @click.argument("commands", nargs=-1)
-def cli(service, quiet, parallel, timeout, commands):
+def cli(**kwargs):
     """Wait for service(s) to be available before executing a command."""
+    try:
+        _cli_internal(**kwargs)
+    except _WaitForItException as e:
+        _Messenger.tell_failure(str(e))
+        sys.exit(1)
 
+
+def _cli_internal(service, quiet, parallel, timeout, commands):
     if quiet:
         sys.stdout = open(os.devnull, "w")
 
