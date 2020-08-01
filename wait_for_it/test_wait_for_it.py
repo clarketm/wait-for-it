@@ -10,7 +10,11 @@ from unittest import TestCase
 
 from click.testing import CliRunner
 from parameterized import parameterized
-from .wait_for_it import cli, _determine_host_and_port_for
+from .wait_for_it import (
+    cli,
+    _determine_host_and_port_for,
+    _MalformedServiceSyntaxException,
+)
 
 _ANY_FREE_PORT = 0
 
@@ -113,8 +117,11 @@ class CliTest(TestCase):
 class DetermineHostAndPortForTest(TestCase):
     @parameterized.expand(
         [
+            ("[::1]:1234", "::1", 1234),
             ("domain.ext", "domain.ext", 80),
-            ("domain.ext:123", "domain.ext", 123),
+            ("domain.ext:0", "domain.ext", 80),
+            ("domain.ext:1", "domain.ext", 1),
+            ("domain.ext:65535", "domain.ext", 65535),
             ("http://domain.ext", "domain.ext", 80),
             ("http://domain.ext/path/", "domain.ext", 80),
             ("https://domain.ext", "domain.ext", 443),
@@ -125,3 +132,15 @@ class DetermineHostAndPortForTest(TestCase):
         actual_host, actual_port = _determine_host_and_port_for(service)
         assert actual_host == expected_host
         assert actual_port == expected_port
+
+    @parameterized.expand(
+        [
+            ("::1:1234",),  # needs "[::1]:1234", instead
+            ("domain.ext:-1",),
+            ("domain.ext:65536",),
+            ("domain.ext:1.2",),
+        ]
+    )
+    def test_rejected(self, service):
+        with self.assertRaises(_MalformedServiceSyntaxException):
+            _determine_host_and_port_for(service)
