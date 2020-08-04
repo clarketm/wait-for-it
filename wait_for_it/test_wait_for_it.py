@@ -51,10 +51,10 @@ def _start_server_thread():
     return server
 
 
-def _occupy_free_tcp_port():
+def _occupy_free_tcp_port(host):
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    sock.bind(("127.0.0.1", _ANY_FREE_PORT))
-    host, port = sock.getsockname()
+    sock.bind((host, _ANY_FREE_PORT))
+    _, port = sock.getsockname()
     return host, port, sock
 
 
@@ -100,9 +100,18 @@ class CliTest(TestCase):
         finally:
             server.stop()
 
-    @parameterized.expand([("parallel", ["-p"], 2), ("serial", [], 1)])
-    def test_service_unavailable(self, _label, extra_argv, expected_report_count):
-        host, port, sock = _occupy_free_tcp_port()
+    @parameterized.expand(
+        [
+            ("parallel", ["-p"], 2, "127.0.0.1"),
+            ("parallel", ["-p"], 2, "0.0.0.0"),
+            ("parallel", ["-p"], 2, "localhost"),
+            ("serial", [], 1, "127.0.0.1"),
+            ("serial", [], 1, "0.0.0.0"),
+            ("serial", [], 1, "localhost"),
+        ]
+    )
+    def test_service_unavailable(self, _label, extra_argv, expected_report_count, host):
+        _, port, sock = _occupy_free_tcp_port(host)
         try:
             result = self._runner.invoke(
                 cli,

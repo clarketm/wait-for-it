@@ -54,7 +54,7 @@ async def _wait_until_available(host, port):
             if sys.version_info[:2] >= (3, 7):
                 await writer.wait_closed()
             break
-        except (socket.gaierror, ConnectionError):
+        except (socket.gaierror, ConnectionError, OSError, TypeError):
             pass
         await asyncio.sleep(1)
 
