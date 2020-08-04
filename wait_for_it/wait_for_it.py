@@ -148,7 +148,10 @@ class _Messenger:
 
 class _ConnectionJobReporter:
     def __init__(self, host, port, timeout):
-        self._friendly_name = f"{host}:{port}"
+        host_is_an_ipv6_address = ":" in host
+        self._friendly_name = (
+            f"[{host}]:{port}" if host_is_an_ipv6_address else f"{host}:{port}"
+        )
         self._timeout = timeout
         self._started_at = None
         self.job_successful = None
