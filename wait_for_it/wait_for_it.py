@@ -83,13 +83,6 @@ async def _wait_until_available_and_report(reporter, host, port):
     help="Test services in parallel rather than in serial",
 )
 @click.option(
-    "-s",
-    "--service",
-    metavar="host:port",
-    multiple=True,
-    help="Services to test, in one of the formats 'host:port', '[v6addr]:port' or 'https://...'",
-)
-@click.option(
     "-t",
     "--timeout",
     type=int,
@@ -97,6 +90,13 @@ async def _wait_until_available_and_report(reporter, host, port):
     default=15,
     show_default=True,
     help="Timeout in seconds, 0 for no timeout",
+)
+@click.option(
+    "-s",
+    "--service",
+    metavar="host:port",
+    multiple=True,
+    help="Services to test, in one of the formats 'host:port', '[v6addr]:port' or 'https://...'",
 )
 @click.argument("commands", nargs=-1)
 def cli(**kwargs):
