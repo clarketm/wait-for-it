@@ -96,7 +96,11 @@ async def _wait_until_available_and_report(reporter, host, port):
     "--service",
     metavar="host:port",
     multiple=True,
-    help="Services to test, in one of the formats 'host:port', '[v6addr]:port' or 'https://...'",
+    help="Services to test, in one of the formats "
+    "'hostname:port', "
+    "'v4addr:port', "
+    "'[v6addr]:port' or "
+    "'https://...'",
 )
 @click.argument("commands", nargs=-1)
 def cli(**kwargs):
