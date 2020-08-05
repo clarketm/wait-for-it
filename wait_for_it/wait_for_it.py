@@ -83,13 +83,6 @@ async def _wait_until_available_and_report(reporter, host, port):
     help="Test services in parallel rather than in serial",
 )
 @click.option(
-    "-s",
-    "--service",
-    metavar="host:port",
-    multiple=True,
-    help="Services to test, in the format host:port",
-)
-@click.option(
     "-t",
     "--timeout",
     type=int,
@@ -97,6 +90,17 @@ async def _wait_until_available_and_report(reporter, host, port):
     default=15,
     show_default=True,
     help="Timeout in seconds, 0 for no timeout",
+)
+@click.option(
+    "-s",
+    "--service",
+    metavar="host:port",
+    multiple=True,
+    help="Services to test, in one of the formats "
+    "'hostname:port', "
+    "'v4addr:port', "
+    "'[v6addr]:port' or "
+    "'https://...'",
 )
 @click.argument("commands", nargs=-1)
 def cli(**kwargs):
@@ -148,7 +152,10 @@ class _Messenger:
 
 class _ConnectionJobReporter:
     def __init__(self, host, port, timeout):
-        self._friendly_name = f"{host}:{port}"
+        host_is_an_ipv6_address = ":" in host
+        self._friendly_name = (
+            f"[{host}]:{port}" if host_is_an_ipv6_address else f"{host}:{port}"
+        )
         self._timeout = timeout
         self._started_at = None
         self.job_successful = None
