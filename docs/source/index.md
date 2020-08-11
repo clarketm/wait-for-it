@@ -35,7 +35,7 @@ $ pip install wait-for-it
 ```
 
 ## Demo
-![usage demo](https://raw.githubusercontent.com/clarketm/wait-for-it/master/usage.gif)
+[![usage demo](https://asciinema.org/a/351695.svg)](https://asciinema.org/a/351695)
 
 ## Usage
 ```text
