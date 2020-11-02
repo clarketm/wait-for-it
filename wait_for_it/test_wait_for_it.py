@@ -100,14 +100,36 @@ class CliTest(TestCase):
         finally:
             server.stop()
 
+    @parameterized.expand([("parallel", ["-p"]), ("serial", [])])
+    def test_service_available_implied_host(self, _label, extra_argv):
+        server = _start_server_thread()
+        try:
+            result = self._runner.invoke(
+                cli,
+                [
+                    "-t1",
+                    "-s",
+                    f":{server.port}",
+                    "-s",
+                    f":{server.port}",
+                ]
+                + extra_argv,
+            )
+            assert result.output.count(" is available after ") == 2
+            assert result.exit_code == 0
+        finally:
+            server.stop()
+
     @parameterized.expand(
         [
             ("parallel", ["-p"], 2, "127.0.0.1"),
             ("parallel", ["-p"], 2, "0.0.0.0"),
             ("parallel", ["-p"], 2, "localhost"),
+            ("parallel", ["-p"], 2, ""),
             ("serial", [], 1, "127.0.0.1"),
             ("serial", [], 1, "0.0.0.0"),
             ("serial", [], 1, "localhost"),
+            ("serial", [], 1, ""),
         ]
     )
     def test_service_unavailable(self, _label, extra_argv, expected_report_count, host):
@@ -126,6 +148,7 @@ class CliTest(TestCase):
 class DetermineHostAndPortForTest(TestCase):
     @parameterized.expand(
         [
+            (":1234", None, 1234),
             ("[::1]:1234", "::1", 1234),
             ("domain.ext", "domain.ext", 80),
             ("domain.ext:0", "domain.ext", 80),

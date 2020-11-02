@@ -97,6 +97,7 @@ async def _wait_until_available_and_report(reporter, host, port):
     metavar="host:port",
     multiple=True,
     help="Services to test, in one of the formats: "
+    "':port', "
     "'hostname:port', "
     "'v4addr:port', "
     "'[v6addr]:port' or "
@@ -152,6 +153,8 @@ class _Messenger:
 
 class _ConnectionJobReporter:
     def __init__(self, host, port, timeout):
+        if host is None:
+            host = ""
         host_is_an_ipv6_address = ":" in host
         self._friendly_name = (
             f"[{host}]:{port}" if host_is_an_ipv6_address else f"{host}:{port}"
