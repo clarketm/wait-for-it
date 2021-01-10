@@ -26,7 +26,7 @@ from recommonmark.transform import AutoStructify
 # -- Project information -----------------------------------------------------
 
 project = u"wait-for-it"
-copyright = "2019, Travis Clarke"
+copyright = "2019-2020, Travis Clarke"
 author = "Travis Clarke"
 
 # The full version, including alpha/beta/rc tags
