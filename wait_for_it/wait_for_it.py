@@ -36,9 +36,10 @@ def _determine_host_and_port_for(service):
 
 
 async def _wait_until_available(host, port):
+    family = 0 if socket.has_ipv6 else socket.AF_INET
     while True:
         try:
-            _reader, writer = await asyncio.open_connection(host, port)
+            _reader, writer = await asyncio.open_connection(host, port, family=family)
             writer.close()
             await writer.wait_closed()
             break
@@ -85,6 +86,7 @@ async def _wait_until_available_and_report(reporter, host, port):
     metavar="host:port",
     multiple=True,
     help="Services to test, in one of the formats: "
+    "':port', "
     "'hostname:port', "
     "'v4addr:port', "
     "'[v6addr]:port' or "
@@ -140,6 +142,8 @@ class _Messenger:
 
 class _ConnectionJobReporter:
     def __init__(self, host, port, timeout):
+        if host is None:
+            host = ""
         host_is_an_ipv6_address = ":" in host
         self._friendly_name = (
             f"[{host}]:{port}" if host_is_an_ipv6_address else f"{host}:{port}"

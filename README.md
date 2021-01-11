@@ -41,7 +41,7 @@ Options:
   -q, --quiet              Do not output any status messages
   -p, --parallel           Test services in parallel rather than in serial
   -t, --timeout seconds    Timeout in seconds, 0 for no timeout  [default: 15]
-  -s, --service host:port  Services to test, in one of the formats:
+  -s, --service host:port  Services to test, in one of the formats: ':port',
                            'hostname:port', 'v4addr:port', '[v6addr]:port' or
                            'https://...'
 ```
