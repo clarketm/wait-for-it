@@ -112,8 +112,13 @@ def _cli_internal(service, quiet, parallel, timeout, commands):
         _connect_all_serial(service, timeout)
 
     if commands:
-        result = subprocess.run(commands)
-        sys.exit(result.returncode)
+        try:
+            result = subprocess.run(commands)
+            exit_code = result.returncode
+        except FileNotFoundError:
+            exit_code = 127  # mimicking Bash
+            _Messenger.tell_failure(f"Command {commands[0]!r} not found")
+        sys.exit(exit_code)
 
 
 class _Messenger:
