@@ -196,6 +196,9 @@ def _exit_on_timeout(timeout, on_exit):
 
 
 async def _connect_all_parallel_async(services, timeout):
+    if not services:
+        return
+
     connect_job_awaitables = []
     reporters = []
 
