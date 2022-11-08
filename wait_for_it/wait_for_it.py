@@ -214,7 +214,9 @@ async def _connect_all_parallel_async(services, timeout):
             reporter.on_timeout()
 
     with _exit_on_timeout(timeout, on_exit=_report_on_all_unsuccessful_jobs):
-        await asyncio.wait(connect_job_awaitables)
+        await asyncio.wait(
+            [asyncio.ensure_future(coro) for coro in connect_job_awaitables]
+        )
 
 
 def _connect_all_parallel(services, timeout):
