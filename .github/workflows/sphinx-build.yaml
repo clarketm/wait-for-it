@@ -1,0 +1,29 @@
+name: Sphinx build
+on: [pull_request, push]
+jobs:
+  docs:
+    strategy:
+      matrix:
+        python-version: [3.8, 3.12]  # oldest and most recent version supported
+    runs-on: ubuntu-24.04
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install dependencies
+      run: |
+        pip3 install \
+          recommonmark \
+          sphinx
+    - name: Build documentation
+      run: |
+        make -C docs/ html
+    - name: Store documentation
+      uses: actions/upload-artifact@v4
+      with:
+        name: "wait_for_it_docs_html_${{ github.sha }}_python_${{ matrix.python-version }}"
+        path: docs/build/html/
+        if-no-files-found: error
