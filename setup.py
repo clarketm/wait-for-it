@@ -8,8 +8,8 @@ with open("README.md", "r") as fh:
 setuptools.setup(
     name="wait-for-it",
     version=__version__,
-    author="Travis Clarke",
-    author_email="travis.m.clarke@gmail.com",
+    author="Travis Clarke, Sebastian Pipping",
+    author_email="travis.m.clarke@gmail.com, sebastian@pipping.org",
     description="Wait for service(s) to be available before executing a command.",
     long_description=long_description,
     long_description_content_type="text/markdown",
