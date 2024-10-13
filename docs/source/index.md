@@ -144,5 +144,5 @@ google is up
 
 ## License
 
-MIT © [**Travis Clarke**](https://blog.travismclarke.com/),
+MIT © [**Travis Clarke**](https://github.com/clarketm),
       [Sebastian Pipping](https://blog.hartwork.org/)

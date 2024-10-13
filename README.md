@@ -8,10 +8,9 @@
 Wait for service(s) to be available before executing a command.
 
 <br>
-<a href="https://blog.travismclarke.com/project/wait-for-it/">
+<a href="https://wait-for-it.readthedocs.io/en/latest/">
   <p align="center"><img width="60%" src="https://raw.githubusercontent.com/clarketm/wait-for-it/master/hero.png" /></p>
 </a>
-
 
 `wait-for-it` is a script that will wait on the availability of one or more TCP services (i.e. `host:port`) before executing a user-defined command.
 It is useful for synchronizing the spin-up of interdependent services, such as linked docker containers.
@@ -136,5 +135,5 @@ google is up
 
 ## License
 
-MIT &copy; [**Travis Clarke**](https://blog.travismclarke.com/),
+MIT &copy; [**Travis Clarke**](https://github.com/clarketm),
            [Sebastian Pipping](https://blog.hartwork.org/)
