@@ -13,7 +13,7 @@ setuptools.setup(
     description="Wait for service(s) to be available before executing a command.",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/clarketm/wait-for-it",
+    url="https://github.com/hartwork/wait-for-it",
     packages=setuptools.find_packages(),
     python_requires=">=3.8",
     setup_requires=["setuptools>=38.6.0"],  # for long_description_content_type

@@ -99,7 +99,7 @@ html_theme = "alabaster"
 
 html_theme_options = {
     "logo": "hero-sidebar.png",
-    "github_user": "clarketm",
+    "github_user": "hartwork",
     "github_repo": "wait-for-it",
     "github_type": "star",
     "github_banner": "forkme_right_red_aa0000.png",

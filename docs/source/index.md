@@ -26,7 +26,7 @@ Version |version|
 `wait-for-it` is a script that will wait on the availability of one or more TCP services (i.e. `host:port`) before executing a user-defined command.
 It is useful for synchronizing the spin-up of interdependent services, such as linked docker containers.
 
-> Since [v2.0.0](https://github.com/clarketm/wait-for-it/releases/tag/v2.0.0), `wait-for-it` will return the exit code of the executed command(s).
+> Since [v2.0.0](https://github.com/hartwork/wait-for-it/releases/tag/v2.0.0), `wait-for-it` will return the exit code of the executed command(s).
 
 ## Installation
 
