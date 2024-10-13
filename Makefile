@@ -9,6 +9,7 @@ list help:
 
 .PHONY: format
 format:
+	@$(PYTHON) -m black --version
 	@$(PYTHON) -m black $(module) $(ARGS)
 
 .PHONY: format-check
