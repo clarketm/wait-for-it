@@ -8,7 +8,5 @@ updates:
     directory: "/"
     labels:
       - "enhancement"
-    reviewers:
-      - "clarketm"
     schedule:
       interval: "weekly"
