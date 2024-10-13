@@ -75,7 +75,7 @@ ifdef version
 	@curl -XPOST \
 	-H "Authorization: token ${GITHUB_ACCESS_TOKEN}" \
 	-H "Content-Type: application/json" \
-	"https://api.github.com/repos/clarketm/${project}/releases" \
+	"https://api.github.com/repos/hartwork/${project}/releases" \
 	--data "{\"tag_name\": \"v${version}\",\"target_commitish\": \"master\",\"name\": \"v${version}\",\"draft\": false,\"prerelease\": false}"
 endif
 

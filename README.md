@@ -1,3 +1,6 @@
+> [!IMPORTANT]
+> The wait-for-it project has a new home at https://github.com/hartwork/wait-for-it by now.
+
 # [wait-for-it](https://wait-for-it.readthedocs.io/en/latest/)
 
 [![PyPi release](https://img.shields.io/pypi/v/wait-for-it.svg)](https://pypi.org/project/wait-for-it/)
@@ -8,15 +11,14 @@
 Wait for service(s) to be available before executing a command.
 
 <br>
-<a href="https://blog.travismclarke.com/project/wait-for-it/">
+<a href="https://wait-for-it.readthedocs.io/en/latest/">
   <p align="center"><img width="60%" src="https://raw.githubusercontent.com/clarketm/wait-for-it/master/hero.png" /></p>
 </a>
-
 
 `wait-for-it` is a script that will wait on the availability of one or more TCP services (i.e. `host:port`) before executing a user-defined command.
 It is useful for synchronizing the spin-up of interdependent services, such as linked docker containers.
 
-> Since [v2.0.0](https://github.com/clarketm/wait-for-it/releases/tag/v2.0.0), `wait-for-it` will return the exit code of the executed command(s).
+> Since [v2.0.0](https://github.com/hartwork/wait-for-it/releases/tag/v2.0.0), `wait-for-it` will return the exit code of the executed command(s).
 
 [Check out the wait-for-it docs](https://wait-for-it.readthedocs.io/en/latest/)
 
@@ -136,5 +138,5 @@ google is up
 
 ## License
 
-MIT &copy; [**Travis Clarke**](https://blog.travismclarke.com/),
+MIT &copy; [**Travis Clarke**](https://github.com/clarketm),
            [Sebastian Pipping](https://blog.hartwork.org/)
