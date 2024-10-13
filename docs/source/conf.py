@@ -52,6 +52,7 @@ extensions = [
     "sphinx.ext.mathjax",
     "sphinx.ext.ifconfig",
     "sphinx.ext.viewcode",
+    "recommonmark",
     # 'sphinx.ext.githubpages',
 ]
 
@@ -59,13 +60,9 @@ extensions = [
 templates_path = ["_templates"]
 
 # The suffix(es) of source filenames.
-# You can specify multiple suffix as a list of string:
 #
 
-# Enable Markdown
-source_parsers = {".md": CommonMarkParser}
-
-source_suffix = [".rst", ".md"]
+source_suffix = {".rst": "restructuredtext", ".md": "markdown"}
 # source_suffix = '.rst'
 
 # The master toctree document.
