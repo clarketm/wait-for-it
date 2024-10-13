@@ -1,4 +1,5 @@
 """wait_for_it cli test module"""
+
 import socket
 import subprocess
 

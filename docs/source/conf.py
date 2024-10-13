@@ -25,7 +25,7 @@ from recommonmark.transform import AutoStructify
 
 # -- Project information -----------------------------------------------------
 
-project = u"wait-for-it"
+project = "wait-for-it"
 copyright = "2019-2020, Travis Clarke"
 author = "Travis Clarke"
 
