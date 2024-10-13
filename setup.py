@@ -15,7 +15,7 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/hartwork/wait-for-it",
     packages=setuptools.find_packages(),
-    python_requires=">=3.8",
+    python_requires=">=3.9",
     setup_requires=["setuptools>=38.6.0"],  # for long_description_content_type
     py_modules=["wait_for_it"],
     install_requires=["click"],
@@ -34,11 +34,11 @@ setuptools.setup(
     classifiers=[
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3 :: Only",
-        "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
         "Programming Language :: Python :: 3.12",
+        "Programming Language :: Python :: 3.13",
         "License :: OSI Approved :: MIT License",
         "Operating System :: POSIX",
         "Topic :: Internet",
