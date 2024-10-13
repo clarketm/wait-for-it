@@ -80,8 +80,8 @@ $ wait-for-it \
 ```
 
 ```text
-waiting for www.google.com:80 without a timeout
-www.google.com:80 is available after 0 seconds
+[*] Waiting for www.google.com:80 without a timeout
+[+] www.google.com:80 is available after 0 seconds
 google is up
 ```
 
