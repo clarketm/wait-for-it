@@ -1,5 +1,12 @@
 name: Python package
-on: [pull_request, push]
+
+on:
+  pull_request:
+  push:
+  schedule:
+    - cron: '0 16 * * 5'  # Every Friday 4pm
+  workflow_dispatch:
+
 jobs:
   build:
     strategy:
