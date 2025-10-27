@@ -29,7 +29,7 @@ jobs:
       run: |
         make -C docs/ html
     - name: Store documentation
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       with:
         name: "wait_for_it_docs_html_${{ github.sha }}_python_${{ matrix.python-version }}"
         path: docs/build/html/
